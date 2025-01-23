@@ -1,0 +1,51 @@
+import { create } from 'zustand';
+import axios from 'axios';
+
+interface Todo {
+  userId: number;
+  id: number;
+  title: string;
+  completed: boolean;
+}
+
+interface TodoStore {
+  todos: Todo[];
+  fetchTodos: () => Promise<void>;
+  addTodo: (newTodo: Omit<Todo, 'id'>) => Promise<void>;
+  updateTodo: (id: number, updatedData: Partial<Todo>) => Promise<void>;
+  deleteTodo: (id: number) => Promise<void>;
+}
+
+const useTodoStore = create<TodoStore>((set) => ({
+  todos: [],
+  fetchTodos: async () => {
+    const response = await axios.get<Todo[]>('https://jsonplaceholder.typicode.com/todos');
+    set({ todos: response.data });
+  },
+  addTodo: async (newTodo) => {
+    try {
+      const response = await axios.post<Todo>('https://jsonplaceholder.typicode.com/todos', {
+        ...newTodo,
+        completed: false, // Set a default completed value
+      });
+      console.log('Added Todo:', response.data); // Log added todo
+      set((state) => ({ todos: [...state.todos, response.data] }));
+    } catch (error) {
+      console.error('Error adding todo:', error);
+    }
+  },
+  updateTodo: async (id, updatedData) => {
+    const response = await axios.put<Todo>(`https://jsonplaceholder.typicode.com/todos/${id}`, updatedData);
+    set((state) => ({
+      todos: state.todos.map(todo => (todo.id === id ? response.data : todo)),
+    }));
+  },
+  deleteTodo: async (id) => {
+    await axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`);
+    set((state) => ({
+      todos: state.todos.filter(todo => todo.id !== id),
+    }));
+  },
+}));
+
+export default useTodoStore;
