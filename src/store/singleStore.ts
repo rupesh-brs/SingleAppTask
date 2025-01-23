@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import axios from 'axios';
 import { usersSchema, User } from '@/schema/userSchema';
-import { v4 as uuidv4 } from 'uuid'; // Importing uuid for unique ID generation
+// import { v4 as uuidv4 } from 'uuid'; // Importing uuid for unique ID generation
 import { Todo } from '@/schema/todoSchema';
 
 // UserAuthStore
