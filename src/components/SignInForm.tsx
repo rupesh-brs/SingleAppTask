@@ -3,6 +3,7 @@ import {useAuthStore} from '@/store/singleStore';
 import { useState } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
 import Link from 'next/link'; // Import Link
+import Image from 'next/image';
 
 const SignInForm = () => {
   const { isUserIdValid, setUserId, validateUserId, setPassword } = useAuthStore();
@@ -79,8 +80,15 @@ const SignInForm = () => {
         </div>
 
         <div className='flex justify-center'>
-          <img src="/Powered_By.png" alt="Powered By" className="inline-block h-14" /> 
-        </div>
+  <Image 
+    src="/Powered_By.png" 
+    alt="Powered By VSF Corporation Pvt Limited" 
+    width={200} 
+    height={100} 
+  />
+  {/* If you need another image, add it here */}
+  {/* <Image src="/another-image.png" alt="Description" width={200} height={100} /> */}
+</div>
       </div>
     </div>
   );
